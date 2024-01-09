@@ -1,3 +1,5 @@
+const jwt = require("jsonwebtoken");
+
 module.exports = {
   friendlyName: "Signup",
 
@@ -26,7 +28,7 @@ module.exports = {
       description: "Successfully created a new user",
     },
     emailAlreadyInUse: {
-      statusCode: 400,
+      statusCode: 409,
       responseType: "emailAlreadyInUse",
       description: "The provided email address / username is already in use.",
     },
@@ -70,7 +72,6 @@ module.exports = {
 
     return exits.success({
       user,
-      message: "Successfully created new user",
       token: jwt.sign({ user: newUser.id }, process.env.JWT_SECRET, {
         expiresIn: "30d",
       }),
