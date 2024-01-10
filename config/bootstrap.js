@@ -9,8 +9,7 @@
  * https://sailsjs.com/config/bootstrap
  */
 
-module.exports.bootstrap = async function() {
-
+module.exports.bootstrap = async function () {
   // By convention, this is a good place to set up fake data during development.
   //
   // For example:
@@ -27,4 +26,13 @@ module.exports.bootstrap = async function() {
   // ]);
   // ```
 
+  if ((await Admin.count()) > 0) {
+    return;
+  }
+  
+  await Admin.create({
+    fullName: "Adefeyitimi Adeyeloja",
+    emailAddress: "adefeyitimi@gmail.com",
+    password: "11235813",
+  });
 };
