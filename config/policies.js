@@ -8,15 +8,14 @@
  * https://sailsjs.com/docs/concepts/policies
  */
 
+const isAdmin = require("../api/policies/isAdmin");
+const isAuth = require("../api/policies/isAuth");
+
 module.exports.policies = {
-
-  /***************************************************************************
-  *                                                                          *
-  * Default policy for all controllers and actions, unless overridden.       *
-  * (`true` allows public access)                                            *
-  *                                                                          *
-  ***************************************************************************/
-
-  // '*': true,
-
+  "*": isAuth,
+  "auth/signup": true,
+  "auth/login": true,
+  "product/add-product": isAdmin,
+  "product/upload-product-image": isAdmin,
+  "product/update-product": isAdmin,
 };

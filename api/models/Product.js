@@ -6,24 +6,38 @@
  */
 
 module.exports = {
-
   attributes: {
-
-    //  ╔═╗╦═╗╦╔╦╗╦╔╦╗╦╦  ╦╔═╗╔═╗
-    //  ╠═╝╠╦╝║║║║║ ║ ║╚╗╔╝║╣ ╚═╗
-    //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
-
-
-    //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
-    //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
-    //  ╚═╝╩ ╩╚═╝╚═╝═╩╝╚═╝
-
-
-    //  ╔═╗╔═╗╔═╗╔═╗╔═╗╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
-    //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
-    //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
-
+    owner: {
+      model: "admin",
+    },
+    productTitle: {
+      type: "string",
+      description: "Product Title",
+    },
+    productTag: {
+      type: "string",
+      description: "Product Tag",
+    },
+    productDescription: {
+      type: "string",
+      description: "Product Description",
+    },
+    price: {
+      type: "json",
+      description: "Product price in different currencies",
+    },
+    productimages: {
+      collection: "productimage",
+      via: "product",
+    },
+    size: {
+      type: "json",
+      description:"Size of Socks Available"
+      // isIn: ["X", "XL", "XXL"],
+    },
+    availableQuantity: {
+      type: "number",
+      description: "Available Quantity in Stock",
+    },
   },
-
 };
-
