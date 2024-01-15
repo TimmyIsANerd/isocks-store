@@ -16,14 +16,31 @@ module.exports = {
       type: "string",
       required: true,
     },
+    emailVerificationStatus: {
+      type: "boolean",
+      defaultsTo: false,
+      description: "Email Verification Status",
+    },
+    emailProofToken: {
+      type: "string",
+      description: "Email Verification Token",
+    },
+    emailProofTokenExpiresAt: {
+      type: "number",
+      description: "Email Verification Token Time To Live",
+    },
     billingInfo: {
       collection: "billinginfo",
       via: "owner",
     },
-    orders:{
-      collection:'order',
-      via:'owner'
-    }
+    orders: {
+      collection: "order",
+      via: "owner",
+    },
+    tos: {
+      type: "string",
+      description: "IP Address that accepts Terms ",
+    },
   },
 
   // Lifecycle Callbacks
