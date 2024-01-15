@@ -28,6 +28,15 @@ module.exports.routes = {
   "GET /api/v1/profile": { action: "user/get-profile" },
   "PATCH /api/v1/profile": { action: "user/update-profile" },
 
+  // Email Verification
+  "GET /api/v1/verification/email/:emailProofToken": {
+    action: "user/verify-email",
+  },
+  // Resend Verification Email
+  "GET /api/v1/verification/email/resend" : {
+    action:"user/resend-verify-email"
+  },
+
   // Products
   "POST /api/v1/product": { action: "product/add-product" },
   // Upload Product Image

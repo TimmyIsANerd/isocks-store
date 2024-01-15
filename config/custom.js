@@ -19,4 +19,12 @@ module.exports.custom = {
   // …
 
   maxBytes: 314572800,
+  baseUrl: "http://localhost:1337",
+  clientBaseURL:
+    process.env === "production"
+      ? "http://localhost:3000"
+      : "https://isocks.ai",
+  verifyEmail: true,
+  passwordResetTokenTTL: 24 * 60 * 60 * 1000, // 24 hours
+  emailProofTokenTTL: 24 * 60 * 60 * 1000, // 24 hours
 };

@@ -46,7 +46,7 @@ module.exports = {
   fn: async function (inputs, exits) {
     const { fullName, emailAddress, password } = inputs;
 
-    const { res } = this;
+    const { req, res } = this;
 
     if (password.length < 8) {
       return res.status(400).json({
@@ -55,14 +55,47 @@ module.exports = {
       });
     }
 
+    const emailProofToken = await sails.helpers.strings.random("url-friendly");
+
     const newUser = await User.create({
       fullName,
       emailAddress,
       password,
+      emailProofToken,
+      emailProofTokenExpiresAt:
+        Date.now() + sails.config.custom.emailProofTokenTTL,
+      emailVerificationStatus: sails.config.custom.verifyEmail ? false : true,
+      tos: req.ip,
     })
       .intercept("E_UNIQUE", "emailAlreadyInUse")
       .intercept({ name: "UsageError" }, "invalid")
       .fetch();
+
+    if (sails.config.custom.verifyEmail) {
+      const cleanEmail = emailAddress.toLowerCase().trim();
+      const baseURL = sails.config.custom.clientBaseURL;
+      const verificationLink = `${baseURL}/store/verify/email/${emailProofToken}`;
+
+      const emailBody = await sails.renderView(
+        "emails/user/email_verification",
+        {
+          layout: false,
+          verificationLink,
+        }
+      );
+
+      try {
+        const result = await sails.helpers.sendEmail.with({
+          to: cleanEmail,
+          subject: "Welcome to iSocks! Just one more step...",
+          html: emailBody,
+        });
+
+        sails.log.info("Successfully delivered verification email address");
+      } catch (error) {
+        sails.log.error(error);
+      }
+    }
 
     if (!newUser) {
       return res.recordCreationFailed("Failed to Create New User");
