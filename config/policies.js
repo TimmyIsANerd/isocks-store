@@ -18,4 +18,5 @@ module.exports.policies = {
   "product/add-product": isAdmin,
   "product/upload-product-image": isAdmin,
   "product/update-product": isAdmin,
+  "user/verify-email": true,
 };
