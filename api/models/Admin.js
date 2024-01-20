@@ -25,6 +25,10 @@ module.exports = {
       collection: "product",
       via: "owner",
     },
+    gallery:{
+      collection:"gallery",
+      via:'owner'
+    }
   },
 
   // Lifecycle Callbacks
