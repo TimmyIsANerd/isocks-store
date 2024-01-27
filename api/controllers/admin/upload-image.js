@@ -1,4 +1,5 @@
 const cloudinary = require("cloudinary").v2;
+const path = require("path");
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -7,16 +8,16 @@ cloudinary.config({
 });
 
 module.exports = {
-  friendlyName: "Upload image",
+  friendlyName: "Upload images",
 
-  description: "Upload Image to Admin Profile Gallery",
+  description: "Upload Images to Admin Profile Gallery",
 
   inputs: {},
 
   exits: {
     success: {
       statusCode: 201,
-      description: "Image Successfully uploaded",
+      description: "Images Successfully uploaded",
     },
     conflict: {
       statusCode: 409,
@@ -34,35 +35,36 @@ module.exports = {
 
     async function uploadImage(galleryId) {
       if (sails.config.custom.uploadToCloud) {
-        req.file("image").upload(
+        req.file("images").upload(
           {
             maxBytes: sails.config.custom.maxBytes,
           },
-          async function whenDone(err, uploadedFile) {
-            if (err || uploadedFile.length === 0) {
+          async function whenDone(err, uploadedFiles) {
+            if (err || uploadedFiles.length === 0) {
               sails.log.error(err);
               return res.serverError({
-                message: "Image Upload Failed",
+                message: "Images Upload Failed",
               });
             }
 
             try {
-              const result = await cloudinary.uploader.upload(
-                uploadedFile[0].fd,
-                {
+              const uploadPromises = uploadedFiles.map(async (file) => {
+                const result = await cloudinary.uploader.upload(file.fd, {
                   folder: `${galleryId}/gallery`,
-                }
-              );
+                });
 
-              await Image.create({
-                gallery: galleryId,
-                title: uploadedFile[0].fileName,
-                imageUrl: result.secure_url,
-                publicId: result.public_id,
+                await Image.create({
+                  gallery: galleryId,
+                  title: file.fileName,
+                  imageUrl: result.secure_url,
+                  publicId: result.public_id,
+                });
               });
 
+              await Promise.all(uploadPromises);
+
               return exits.success({
-                message: "Successfully uploaded image to cloud",
+                message: "Successfully uploaded images to cloud",
               });
             } catch (error) {
               sails.log.error(error);
@@ -75,40 +77,48 @@ module.exports = {
       }
 
       const baseUrl = sails.config.custom.baseUrl;
-      imageFileName = sails.helpers.strings.random();
 
-      req.file("image").upload(
+      req.file("images").upload(
         {
           maxBytes: sails.config.custom.maxBytes,
           dirname: require("path").resolve(
             sails.config.appPath,
             `assets/images/gallery/${galleryId}`
           ),
-          saveAs: `${imageFileName}.png`,
         },
-        async function whenDone(err, uploadedFile) {
-          if (err || uploadedFile.length === 0) {
+        async function whenDone(err, uploadedFiles) {
+          if (err || uploadedFiles.length === 0) {
             sails.log.error(err);
-            return res.serverError({ message: "Image Upload Failed" });
+            return res.serverError({ message: "Images Upload Failed" });
           }
 
-          sails.log.debug(uploadedFile);
+          const uploadPromises = uploadedFiles.map(async (file) => {
+            const imageFileName = file.fd.split("/").pop(); // Get the generated filename
+            
+            function extractRelativePath(fullPath) {
+              const assetsPath = path.resolve(sails.config.appPath, "assets");
+              const relativePath = path.relative(assetsPath, fullPath);
+              return relativePath.replace(/\\/g, "/"); // Convert backslashes to forward slashes
+            }
 
-          try {
-            await Image.create({
-              gallery: galleryId,
-              title: uploadedFile[0].filename,
-              imageUrl: `${baseUrl}/images/gallery/${galleryId}/${imageFileName}.png`,
-              publicId: imageFileName,
-            });
+            try {
+              await Image.create({
+                gallery: galleryId,
+                title: file.filename,
+                imageUrl: `${baseUrl}/${extractRelativePath(imageFileName)}`,
+                publicId: imageFileName,
+              });
+            } catch (error) {
+              sails.log.error(error);
+              return res.serverError({
+                message: "Image record creation failed",
+              });
+            }
+          });
 
-            return exits.success({ message: "Successfully uploaded image" });
-          } catch (error) {
-            sails.log.error(error);
-            return res.serverError({
-              message: "Image record creation failed",
-            });
-          }
+          await Promise.all(uploadPromises);
+
+          return exits.success({ message: "Successfully uploaded images" });
         }
       );
     }
