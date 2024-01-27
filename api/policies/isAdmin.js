@@ -31,7 +31,7 @@ module.exports = async function (req, res, proceed) {
       });
 
       if (!adminRecord) {
-        return res.status(404).json({
+        return res.status(401).json({
           error: "Resource Not Found",
           message: "User does not exist in Database",
         });
