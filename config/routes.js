@@ -28,13 +28,30 @@ module.exports.routes = {
   "GET /api/v1/profile": { action: "user/get-profile" },
   "PATCH /api/v1/profile": { action: "user/update-profile" },
 
+  // Admin Login
+  "POST /api/v1/admin/auth/login": { action: "admin/auth/login" },
+  // Get Admin Profile
+  "GET /api/v1/admin/profile": { action: "admin/profile/get-user" },
+
   // Email Verification
   "GET /api/v1/verification/email/:emailProofToken": {
     action: "user/verify-email",
   },
   // Resend Verification Email
-  "GET /api/v1/verification/email/resend" : {
-    action:"user/resend-verify-email"
+  "GET /api/v1/verification/email/resend": {
+    action: "user/resend-verify-email",
+  },
+
+  // Image Gallery
+  // Upload Image
+  "POST /api/v1/gallery/image": { action: "admin/upload-image" },
+  // GET Images
+  "GET /api/v1/gallery": { action: "admin/gallery/get-images" },
+  // GET Image
+  "GET /api/v1/gallery/:imageId": { action: "admin/gallery/get-image" },
+
+  "PATCH /api/v1/gallery/image/:galleryId/:imageId": {
+    action: "admin/edit-image-prop",
   },
 
   // Products
