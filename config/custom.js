@@ -24,7 +24,8 @@ module.exports.custom = {
     process.env === "production"
       ? "http://localhost:3000"
       : "https://isocks.ai",
-  verifyEmail: true,
+  verifyEmail: false,
   passwordResetTokenTTL: 24 * 60 * 60 * 1000, // 24 hours
   emailProofTokenTTL: 24 * 60 * 60 * 1000, // 24 hours
+  uploadToCloud:process.env === "production" ? true : false
 };
