@@ -29,10 +29,16 @@ module.exports.bootstrap = async function () {
   if ((await Admin.count()) > 0) {
     return;
   }
-  
-  await Admin.create({
-    fullName: "Adefeyitimi Adeyeloja",
-    emailAddress: "adefeyitimi@gmail.com",
-    password: "11235813",
-  });
+  try {
+    const newAdmin = await Admin.create({
+      fullName: "Adefeyitimi Adeyeloja",
+      emailAddress: "adefeyitimi@gmail.com",
+      password: "11235813",
+    }).fetch();
+
+    const newGallery = await Gallery.create({ owner: newAdmin.id }).fetch();
+    sails.log.info(newGallery);
+  } catch (error) {
+    sails.log.error(error);
+  }
 };
