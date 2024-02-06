@@ -31,7 +31,7 @@ module.exports = {
       description: "Total Price of Products",
       required: true,
     },
-    orderDate: {
+    orderInitialDate: {
       type: "string",
       description: "Initialized Order Date",
       required: true,
