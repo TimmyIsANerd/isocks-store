@@ -14,26 +14,29 @@ module.exports = {
       type: "string",
       description: "Product Title",
     },
-    productTag: {
-      type: "string",
-      description: "Product Tag",
+    productTags: {
+      type: "json",
+      description: "Product Tags",
+      defaultsTo: [],
     },
     productDescription: {
       type: "string",
       description: "Product Description",
     },
     price: {
-      type: "json",
-      description: "Product price in different currencies",
+      type: "number",
+      description: "Product price in dollar",
+      defaultsTo: 0,
     },
     productimages: {
       collection: "productimage",
       via: "product",
     },
-    size: {
+    sizes: {
       type: "json",
-      description:"Size of Socks Available"
+      description: "Size of Socks Available",
       // isIn: ["X", "XL", "XXL"],
+      defaultsTo: [],
     },
     availableQuantity: {
       type: "number",
