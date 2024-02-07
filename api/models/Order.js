@@ -39,6 +39,7 @@ module.exports = {
     orderDeliveryDate: {
       type: "string",
       description: "Delivered Order Date",
+      defaultsTo: "",
     },
   },
 };
