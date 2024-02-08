@@ -7,6 +7,22 @@
 
 module.exports = {
   attributes: {
+    title: {
+      type: "string",
+      description: "Image Title",
+    },
+    description: {
+      type: "string",
+      description: "Image Description",
+    },
+    alt: {
+      type: "string",
+      description: "Image Alt for accessibility",
+    },
+    tags: {
+      type: "json",
+      description: "Tags to Search and find Image",
+    },
     imageUrl: {
       type: "string",
       description: "Image Cloudinary Download Link",
@@ -17,6 +33,10 @@ module.exports = {
     },
     product: {
       model: "product",
+    },
+    galleryId: {
+      type: "string",
+      description: "Gallery ID Image is present in",
     },
   },
 };

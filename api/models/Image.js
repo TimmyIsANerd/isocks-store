@@ -10,6 +10,10 @@ module.exports = {
     gallery: {
       model: "gallery",
     },
+    product: {
+      type: "string",
+      description: "Product Id",
+    },
     title: {
       type: "string",
       description: "Image Title",
