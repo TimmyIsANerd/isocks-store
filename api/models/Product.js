@@ -29,8 +29,8 @@ module.exports = {
       defaultsTo: 0,
     },
     productimages: {
-      collection: "productimage",
-      via: "product",
+      type: "json",
+      description: "Array of Product Images",
     },
     sizes: {
       type: "json",
