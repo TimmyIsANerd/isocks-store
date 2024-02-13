@@ -9,7 +9,6 @@ module.exports = {
   attributes: {
     owner: {
       model: "user",
-      unique: true,
     },
     address: {
       type: "string",
@@ -32,6 +31,10 @@ module.exports = {
     country: {
       type: "string",
       required: true,
+    },
+    isDefault: {
+      type: "boolean",
+      defaultsTo: false,
     },
   },
 };
