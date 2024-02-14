@@ -16,7 +16,7 @@ module.exports = {
     const { req } = this;
     const id = req.user;
 
-    const userRecord = await User.findOne({ id });
+    const userRecord = await User.findOne({ id }).populate("billingInfo");
 
     if (!userRecord) {
       return res.notFound("User Profile Not Found");
