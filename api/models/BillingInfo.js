@@ -10,6 +10,11 @@ module.exports = {
     owner: {
       model: "user",
     },
+    fullName: {
+      type: "string",
+      description: "Recepient Full Name",
+      required: true,
+    },
     address: {
       type: "string",
       description: "User's Billing Address",
@@ -26,11 +31,15 @@ module.exports = {
     },
     postalCode: {
       type: "string",
-      required: true,
+      defaultsTo: "",
     },
     country: {
       type: "string",
       required: true,
+    },
+    phoneNumber: {
+      type: "json",
+      description: "User Phone Number",
     },
     isDefault: {
       type: "boolean",

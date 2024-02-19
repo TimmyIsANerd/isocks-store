@@ -31,6 +31,7 @@ module.exports = {
     productimages: {
       type: "json",
       description: "Array of Product Images",
+      defaultsTo:[]
     },
     sizes: {
       type: "json",

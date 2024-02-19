@@ -18,13 +18,22 @@ module.exports = {
     },
     paymentMethod: {
       type: "string",
-      isIn: ["USDT", "USD", "NGN", "DTG"],
+      isIn: ["USDT - Tether", "US Dollar", "Nigerian Naira", "Defi Tiger"],
       description: "Payment Method",
+    },
+    paidStatus: {
+      type: "string",
+      isIn: ["paid", "unpaid"],
+      defaultsTo: "unpaid",
     },
     products: {
       type: "json",
       description: "Array of Ordered Products",
       required: true,
+    },
+    billingInfo: {
+      type: "json",
+      description: "Billing Information",
     },
     totalPrice: {
       type: "number",
@@ -40,6 +49,11 @@ module.exports = {
       type: "string",
       description: "Delivered Order Date",
       defaultsTo: "",
+    },
+    deliveryEstimate: {
+      type: "string",
+      description: "Order Delivery Date",
+      example: "Delivery between 19 February and 23 February.",
     },
   },
 };
