@@ -45,8 +45,14 @@ module.exports = {
   },
 
   fn: async function (inputs, exits) {
-    const { productTitle, productTags, productDescription, price, sizes } =
-      inputs;
+    const {
+      productTitle,
+      productTags,
+      productDescription,
+      price,
+      sizes,
+      availableQuantity,
+    } = inputs;
 
     const { req } = this;
     const id = req.user;
@@ -65,6 +71,9 @@ module.exports = {
       return exits.failed();
     }
 
-    return exits.success({ message: "Successfully added new product" });
+    return exits.success({
+      message: "Successfully added new product",
+      ...newProduct,
+    });
   },
 };

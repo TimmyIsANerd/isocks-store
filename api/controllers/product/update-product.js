@@ -9,10 +9,9 @@ module.exports = {
       description: "Product Title",
       required: true,
     },
-    productTag: {
-      type: "string",
+    productTags: {
+      type: "json",
       description: "Product Tag",
-      required: true,
     },
     productDescription: {
       type: "string",
@@ -22,7 +21,6 @@ module.exports = {
     price: {
       type: "number",
       description: "Product price in dollar",
-      required: true,
     },
     sizes: {
       type: "json",
@@ -49,7 +47,7 @@ module.exports = {
   fn: async function (inputs, exits) {
     const {
       productTitle,
-      productTag,
+      productTags,
       productDescription,
       price,
       sizes,
@@ -65,20 +63,25 @@ module.exports = {
     }
 
     try {
-      await Product.updateOne({ id }).set({
-        productTitle,
-        productTag,
-        productDescription,
-        price,
-        sizes,
-        availableQuantity,
+      const updatedProduct = await Product.updateOne({ id })
+        .set({
+          productTitle,
+          productTags,
+          productDescription,
+          price,
+          sizes,
+          availableQuantity,
+        })
+        .fetch();
+
+      return exits.success({
+        message: "Successfully updated user product",
+        ...updatedProduct,
       });
     } catch (error) {
       sails.log.error(error);
 
       return exits.failed({ message: "Failed to update user's product" });
     }
-
-    return exits.success({ message: "Successfully updated user product" });
   },
 };

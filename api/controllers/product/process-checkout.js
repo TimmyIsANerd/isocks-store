@@ -1,3 +1,5 @@
+const { addWeeks, format } = require("date-fns");
+
 module.exports = {
   friendlyName: "Process checkout",
 
@@ -11,8 +13,18 @@ module.exports = {
     },
     paymentMethod: {
       type: "string",
-      isIn: ["USDT", "USD", "NGN", "DTG"],
+      isIn: ["USDT - Tether", "US Dollar", "Nigerian Naira", "Defi Tiger"],
       description: "Payment Method",
+      required: true,
+    },
+    billingInfo: {
+      type: "json",
+      description: "Billing Information",
+      required: true,
+    },
+    totalPrice: {
+      type: "number",
+      description: "Total Price ",
     },
   },
 
@@ -24,16 +36,32 @@ module.exports = {
   },
 
   fn: async function (inputs, exits) {
-    const { products } = inputs;
+    const { products, paymentMethod, billingInfo, totalPrice } = inputs;
     const { req, res } = this;
     const id = req.user;
 
-    const totalPrice = products.reduce(
-      (accumulator, product) => accumulator + product.price * product.quantity,
-      0
-    );
+    if (products.length === 0) {
+      return res.badRequest("Client side sent an empty cart");
+    }
 
-    const orderInitialDate = new Date.now();
+    for (let i = 0; i < products.length; i++) {
+      const productRecord = await Product.findOne({ id: products[i].id });
+
+      if (!productRecord) {
+        return res.notFound(
+          `Could not find product with that id ${products[i].id}`
+        );
+      }
+    }
+
+    const orderInitialDate = new Date().now();
+
+    const oneWeekAfter = addWeeks(orderInitialDate, 1);
+    const twoWeeksAfter = addWeeks(orderInitialDate, 2);
+
+    function formatDate(date) {
+      return format(date, "dd MMMM");
+    }
 
     try {
       const newOrder = await Order.create({
@@ -42,10 +70,15 @@ module.exports = {
         orderInitialDate,
         products,
         paymentMethod,
+        billingInfo,
+        deliveryEstimate: `Between ${formatDate(oneWeekAfter)} & ${formatDate(
+          twoWeeksAfter
+        )}`,
       });
 
-      return exits.success({ ...newOrder });
+      return exits.success(newOrder);
     } catch (error) {
+      sails.log.error(error);
       return res.serverError({ message: "Failed to Create Order Record" });
     }
   },
