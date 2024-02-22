@@ -18,6 +18,10 @@ module.exports.policies = {
   "product/add-product": isAdmin,
   "product/upload-product-image": isAdmin,
   "product/update-product": isAdmin,
+  "product/set-product-image": isAdmin,
+  "product/get-product": true,
+  "product/get-products": true,
+  "product/delete-product": isAdmin,
   "user/verify-email": true,
   "admin/upload-image": isAdmin,
   "admin/edit-image-prop": isAdmin,
@@ -25,4 +29,5 @@ module.exports.policies = {
   "admin/profile/get-user": isAdmin,
   "admin/gallery/get-images": isAdmin,
   "admin/gallery/get-image": isAdmin,
+  "admin/profile/get-stats": isAdmin,
 };
