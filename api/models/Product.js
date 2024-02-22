@@ -28,7 +28,7 @@ module.exports = {
       description: "Product price in dollar",
       defaultsTo: 0,
     },
-    productimages: {
+    productImages: {
       type: "json",
       description: "Array of Product Images",
       defaultsTo:[]
