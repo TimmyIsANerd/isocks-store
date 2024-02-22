@@ -32,6 +32,8 @@ module.exports.routes = {
   "POST /api/v1/admin/auth/login": { action: "admin/auth/login" },
   // Get Admin Profile
   "GET /api/v1/admin/profile": { action: "admin/profile/get-user" },
+  // Get Admin Dashboard Stats
+  'GET /api/v1/admin/dashboard' : {action:"admin/profile/get-stats"},
 
   // Email Verification
   "GET /api/v1/verification/email/:emailProofToken": {
@@ -55,13 +57,38 @@ module.exports.routes = {
   },
 
   // Products
+  // Find All Products
+  "GET /api/v1/product": { action: "product/get-products" },
+  // Find One Product
+  "GET /api/v1/product/:productId": { action: "product/get-product" },
+  // Add Product
   "POST /api/v1/product": { action: "product/add-product" },
-  // Upload Product Image
-  "PATCH /api/v1/product/:productId": {
-    action: "product/upload-product-image",
+  // Set Product Image
+  "PATCH /api/v1/product/image/:productId": {
+    action: "product/set-product-image",
   },
+  // Update Product
   "PATCH /api/v1/product/:productId": { action: "product/update-product" },
+  // Delete Product
+  "DELETE /api/v1/product/:productId": { action: "product/delete-product" },
 
+  // Purchase Logic
+  // Process Cart and Return Total
+  "POST /api/v1/product/checkout": { action: "product/process-checkout" },
+
+  // Orders
+  "GET /api/v1/order": { action: "order/get-orders" },
+  "GET /api/v1/order/:orderId": { action: "order/get-order" },
+  // Update Order Status
+  // Set to Processing
+  "POST /api/v1/order": { action: "order/set-status" },
+
+  // Billing Information
+  "GET /api/v1/billing/address/:id": { action: "billing/get-address" },
+  "GET /api/v1/billing/address": { action: "billing/get-all-address" },
+  "DELETE /api/v1/billing/address/:id": { action: "billing/delete-address" },
+  "POST /api/v1/billing/address": { action: "billing/set-address" },
+  "PATCH /api/v1/billing/address/:id": { action: "billing/update-address" },
   /***************************************************************************
    *                                                                          *
    * More custom routes here...                                               *
