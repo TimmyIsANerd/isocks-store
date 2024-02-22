@@ -29,7 +29,6 @@ module.exports = {
     const { req, res } = this;
 
     const id = req.user;
-
     const adminRecord = await Admin.findOne({ id });
     const galleryRecord = await Gallery.findOne({ owner: adminRecord.id });
 
